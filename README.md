@@ -1,24 +1,9 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Check The Main Flow architect server here, https://drive.google.com/file/d/1yZ2peg4Fg3NoyLuAiw0Z33uo8xsbaZWR/view?usp=sharing
+## 14/02 Deployment includes:
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Features Automatically, pull Data from loggly, each time, we can pull 1.000 events
+Features filter MAIDs and CookieID
+Feature calculate Footfall
+Models Structures For Campaings AdGroups Locations and Platform
