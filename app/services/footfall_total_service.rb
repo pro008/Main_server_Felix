@@ -1,4 +1,4 @@
-class FootfallService
+class FootfallTotalService
   def initialize(**opts)
     @footfall_dates  = opts[:footfall_dates]
     @dmax  = opts[:dmax]

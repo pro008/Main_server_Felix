@@ -1,11 +1,11 @@
 class FootfallService
   def initialize(**opts)
     @footfall_dates  = opts[:footfall_dates]
-    @dmax  = opts[:dmax]
-    @rest_time  = opts[:rest_time].minutes || 20.minutes
+    @dmax = opts[:dmax] || 100
+    @rest_time = opts[:rest_time]&.minutes || 20.minutes
     @max_ff_per_day_by_device  = opts[:max_ff_per_day_by_device] || 3
     @etype = opts[:etype] || 'imp'
-    @virtual_locations  = opts[:virtual_locations]
+    @virtual_locations = opts[:virtual_locations] # {destination: {lat: 44.478395, lng:26.103578}}
   end
 
   def distance(loc1, loc2)
@@ -86,10 +86,11 @@ class FootfallService
     foo = {}
     total_foo = {}
     # locations = ca.ad_groups.inject([]) { |r, g| r + g.locations } if virtual_locations.present?
-    binding.pry
     data.reverse.each do |event|
-      e = event['event']['json']
-      datetime = Time.at(event['timestamp']/1000)
+      # e = event['event']['json']
+      # datetime = Time.at(event['timestamp']/1000)
+      e = event
+      datetime = e['timestamp']
       next if e['lat'] == 'unknown' || e['lng'] == 'unknown'
 
       if e['device_id'] && e['device_id'].include?('-')
