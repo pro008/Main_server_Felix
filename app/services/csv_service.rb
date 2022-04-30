@@ -36,11 +36,11 @@ end
 
 
 # for device id only
-device_ids = @results.map{|e| e['device_id']}
+device_ids = @results.map{|e| e['device_id']}.uniq
 q
 device_ids = device_ids.inject([]) { |r, t| t[0] != '-' && t.include?('-') ? r << t.downcase : r }
 q
-CSV.open("device_id.csv", "w") do |csv|
+CSV.open("device_id_wetransfer.csv", "w") do |csv|
   device_ids.each do |e|
     csv << [e]
   end
@@ -49,7 +49,7 @@ end
 
 
 # footfall
-CSV.open("footfall.csv", "w") do |csv|
+CSV.open("brigestone.csv", "w") do |csv|
   csv << r.first.keys
   r.each do |e|
     csv << e.values

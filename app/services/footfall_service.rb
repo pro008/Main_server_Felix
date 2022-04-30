@@ -1,12 +1,14 @@
 class FootfallService
   def initialize(**opts)
-    @footfall_dates  = opts[:footfall_dates]
+    @footfall_dates = opts[:footfall_dates]
     @dmax = opts[:dmax] || 100
     @rest_time = opts[:rest_time]&.minutes || 20.minutes
     @max_ff_per_day_by_device  = opts[:max_ff_per_day_by_device] || 3
     @etype = opts[:etype] || 'imp'
     @virtual_locations = opts[:virtual_locations] # {destination: {lat: 44.478395, lng:26.103578}}
   end
+
+  # FootfallService.new(virtual_locations: virtual_locations, footfall_dates: ['2022-03-01..2022-05-20'], dmax: 500).execute(s)
 
   def distance(loc1, loc2)
     rad_per_deg = Math::PI / 180 # PI / 180
@@ -86,7 +88,7 @@ class FootfallService
     foo = {}
     total_foo = {}
     # locations = ca.ad_groups.inject([]) { |r, g| r + g.locations } if virtual_locations.present?
-    data.reverse.each do |event|
+    data.reverse.each_with_index do |event, i|
       # e = event['event']['json']
       # datetime = Time.at(event['timestamp']/1000)
       e = event

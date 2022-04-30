@@ -30,13 +30,12 @@ class Loggly::RetriveService
   end
 
   def fetch_data
-    binding.pry
     url_fetch
     return @results
   end
 
-  def url_fetch(next_page_url = nil)
-    final_url = next_page_url || event_url
+  def url_fetch(next_page_url = nil, campaign = 'PennyAprill2022')
+    final_url = next_page_url || event_url_v2
     response = net_request(final_url)
 
     return unless response.code == "200"
@@ -49,7 +48,7 @@ class Loggly::RetriveService
       event = e['event']['json']
       timestamp = Time.at(e['timestamp']/1000)
       event['timestamp'] = timestamp
-      @results.push(event) if event['campaign'].eql?('bridgestone')
+      @results.push(event)
     end
     # @results.concat(body['events'].map{|e| e['event']['json']})
 
@@ -58,7 +57,7 @@ class Loggly::RetriveService
   end
 
   def url_fetch_custom(next_page_url = nil)
-    final_url = next_page_url || event_url
+    final_url = next_page_url || event_url_v2
     response = net_request(final_url)
 
     return unless response.code == "200"
@@ -102,6 +101,11 @@ class Loggly::RetriveService
 
   def event_url
     options = {q: "*", from: "2022-03-29 00:00:00.000", until: "now", size: "1000"}.to_query
+    EVENT_DIRECT_URI + options
+  end
+
+  def event_url_v2
+    options = {q: campaign, from: "2022-03-30 00:00:00.000", until: "now", size: "1000"}.to_query
     EVENT_DIRECT_URI + options
   end
 end
