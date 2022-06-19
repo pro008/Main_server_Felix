@@ -54,7 +54,7 @@ class Loggly::RetriveService
 
   def url_fetch(next_page_url = nil)
     final_url = next_page_url || event_url_v2
-
+    response = net_request(final_url)
     return unless response.code == '200'
 
     body = JSON.parse(response.body)

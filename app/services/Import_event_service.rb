@@ -29,3 +29,6 @@ class ImportEventService
     )
   end
 end
+
+# campaigns = ['A', 'B']
+# campaigns.each{|c| Loggly::RetriveService.new(c, '', true).fetch_data}
