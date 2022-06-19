@@ -8,7 +8,7 @@ class FootfallService
     @virtual_locations = opts[:virtual_locations] # {destination: {lat: 44.478395, lng:26.103578}}
   end
 
-  # FootfallService.new(virtual_locations: virtual_locations, footfall_dates: ['2022-03-01..2022-05-20'], dmax: 500).execute(s)
+  # r = FootfallService.new(virtual_locations: virtual_locations, footfall_dates: ['2022-03-01..2022-05-30'], dmax: 100).execute(@results)
 
   def distance(loc1, loc2)
     rad_per_deg = Math::PI / 180 # PI / 180
@@ -89,6 +89,7 @@ class FootfallService
     total_foo = {}
     # locations = ca.ad_groups.inject([]) { |r, g| r + g.locations } if virtual_locations.present?
     data.reverse.each_with_index do |event, i|
+      next unless event['campaign'] == 'CP'
       # e = event['event']['json']
       # datetime = Time.at(event['timestamp']/1000)
       e = event

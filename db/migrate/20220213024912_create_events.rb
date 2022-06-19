@@ -6,6 +6,7 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.string :conversionid
       t.string :cookieid
       t.string :cookiesites
+      t.string :site
       t.float :latitude
       t.float :longitude
       t.string :countrycode
@@ -13,6 +14,8 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.string :device_id
       t.string :device_model
       t.string :device_os
+      t.string :app_name
+      t.string :ad_exchange
       t.float :distance
       t.float :dmax
       t.string :host
@@ -26,11 +29,17 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.integer :nearest_location_id
       t.integer :platform_id
       t.string :remoteaddr
-      t.string :type
+      t.string :ad_type
       t.string :useragent
       t.string :userip
       t.string :zipcode
-
+      t.string :model_category
+      t.string :environment
+      t.string :gdpr
+      t.string :pub_id
+      t.string :pub_keyword
+      t.string :pub_store
+      t.datetime :received_at
       t.timestamps null: false
     end
   end

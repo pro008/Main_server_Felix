@@ -1,8 +1,8 @@
 class Event < ActiveRecord::Base
-  belongs_to :platform
+  belongs_to :platform, optional: true
   belongs_to :campaign
-  belongs_to :creative
-  belongs_to :location, foreign_key: :nearest_location_id
+  belongs_to :creative, optional: true
+  belongs_to :location, foreign_key: :nearest_location_id, optional: true
 end
 
 # == Schema Information

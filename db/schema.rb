@@ -23,6 +23,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_032250) do
 
   create_table "campaigns", force: :cascade do |t|
     t.string "name"
+    t.datetime "last_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -50,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_032250) do
     t.string "conversionid"
     t.string "cookieid"
     t.string "cookiesites"
+    t.string "site"
     t.float "latitude"
     t.float "longitude"
     t.string "countrycode"
@@ -57,6 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_032250) do
     t.string "device_id"
     t.string "device_model"
     t.string "device_os"
+    t.string "app_name"
+    t.string "ad_exchange"
     t.float "distance"
     t.float "dmax"
     t.string "host"
@@ -70,10 +74,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_032250) do
     t.integer "nearest_location_id"
     t.integer "platform_id"
     t.string "remoteaddr"
-    t.string "type"
+    t.string "ad_type"
     t.string "useragent"
     t.string "userip"
     t.string "zipcode"
+    t.string "model_category"
+    t.string "environment"
+    t.string "gdpr"
+    t.string "pub_id"
+    t.string "pub_keyword"
+    t.string "pub_store"
+    t.datetime "received_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
