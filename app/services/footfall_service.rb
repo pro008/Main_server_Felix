@@ -89,7 +89,7 @@ class FootfallService
     total_foo = {}
     # locations = ca.ad_groups.inject([]) { |r, g| r + g.locations } if virtual_locations.present?
     data.reverse.each_with_index do |event, i|
-      next unless event['campaign'] == 'CP'
+      # next unless event['campaign'] == 'CP'
       # e = event['event']['json']
       # datetime = Time.at(event['timestamp']/1000)
       e = event

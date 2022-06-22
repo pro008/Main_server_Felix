@@ -28,7 +28,6 @@ creative_ids = if object_type == 'campaign'
                  Creative.where(:id.in => object_ids)
                end.pluck(:id).map(&:to_s)
 
-
 if platform == 'all' && max_distance == 'none'
   query = {
     :creative_id.in => creative_ids,
@@ -39,11 +38,11 @@ if platform == 'all' && max_distance == 'none'
   query.merge!(is_clicked: true) if data_type == 'click'
 
   result = Device.where(query)
-   
+
   if find_with_uniq
     begin
       device_ids = result.distinct(:device_id)
-    rescue
+    rescue StandardError
       device_ids = result.pluck(:device_id).uniq
     end
   else
@@ -61,14 +60,17 @@ else
 
   query.merge!({ platform: platform }) if platform.present? && platform != 'all'
   query.merge!({ device_os: device_os }) if device_os.present? && device_os != 'all'
-  query.merge!({ :distance.lte => max_distance.to_f, :distance.gt => 0 }) if max_distance.present? && max_distance != 'none'
+  if max_distance.present? && max_distance != 'none'
+    query.merge!({ :distance.lte => max_distance.to_f,
+                   :distance.gt => 0 })
+  end
 
   result = Event.where(query)
 
   if find_with_uniq
     begin
       device_ids = result.distinct(:deviceid)
-    rescue
+    rescue StandardError
       device_ids = result.pluck(:deviceid).uniq
     end
   else
@@ -82,13 +84,11 @@ elsif maid_type == 'cookie'
   device_ids = device_ids.inject([]) { |r, t| !t.include?('-') ? r << t.downcase : r }
 end
 
-query_type == 'amount' ? [{amount: device_ids.count}] : device_ids
-
-
+query_type == 'amount' ? [{ amount: device_ids.count }] : device_ids
 
 device_ids = device_ids.inject([]) { |r, t| t[0] != '-' && t.include?('-') ? r << t.downcase : r }
 q
-CSV.open("device_id.csv", "w") do |csv|
+CSV.open('device_id.csv', 'w') do |csv|
   device_ids.each do |e|
     csv << [e]
   end
