@@ -55,7 +55,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_032250) do
     t.float "latitude"
     t.float "longitude"
     t.string "countrycode"
-    t.integer "creative_id"
+    t.string "creative_id"
     t.string "device_id"
     t.string "device_model"
     t.string "device_os"
@@ -84,6 +84,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_13_032250) do
     t.string "pub_id"
     t.string "pub_keyword"
     t.string "pub_store"
+    t.string "placement_id"
+    t.string "referer"
+    t.string "gdpr_consent"
+    t.string "msxt"
     t.datetime "received_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

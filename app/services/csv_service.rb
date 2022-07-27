@@ -7,7 +7,7 @@ c = Campaign.find_by(name: 'Donau Niederösterreich Tourismus GmbH - DONAUGÄRTE
 # for device id only
 device_ids = @results.map { |e| e['device_id'] }.uniq
 q
-device_ids = device_ids.inject([]) { |r, t| t[0] != '-' && t.include?('-') ? r << t.downcase : r }
+device_ids = device_ids.compact.inject([]) { |r, t| t[0] != '-' && t.include?('-') ? r << t.downcase : r }.uniq
 q
 CSV.open('device_id.csv', 'w') do |csv|
   device_ids.each do |e|
@@ -25,7 +25,7 @@ end
 
 # footfall
 require 'csv'
-CSV.open('footfall.csv', 'w') do |csv|
+CSV.open('footfal_200m.csv', 'w') do |csv|
   csv << r.first.keys
   r.each do |e|
     csv << e.values

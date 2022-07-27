@@ -25,7 +25,11 @@ class ImportEventService
       gdpr: event[:gdpr],
       pub_id: event[:pub_id],
       pub_keyword: event[:pub_keyword],
-      pub_store: event[:pub_store]
+      pub_store: event[:pub_store],
+      placement_id: event[:placement_id],
+      referer: event[:referer],
+      gdpr_consent: event[:gdpr_consent],
+      msxt: event[:msxt]
     )
   end
 end

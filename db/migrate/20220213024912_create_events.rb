@@ -10,7 +10,7 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.float :latitude
       t.float :longitude
       t.string :countrycode
-      t.integer :creative_id
+      t.string :creative_id
       t.string :device_id
       t.string :device_model
       t.string :device_os
@@ -39,6 +39,10 @@ class CreateEvents < ActiveRecord::Migration[7.0]
       t.string :pub_id
       t.string :pub_keyword
       t.string :pub_store
+      t.string :placement_id
+      t.string :referer
+      t.string :gdpr_consent
+      t.string :msxt
       t.datetime :received_at
       t.timestamps null: false
     end

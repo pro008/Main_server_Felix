@@ -3,6 +3,10 @@ class Event < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :creative, optional: true
   belongs_to :location, foreign_key: :nearest_location_id, optional: true
+
+  def invalid_lat_lng?
+    latitude&.nonzero?.nil? || longitude&.nonzero?.nil?
+  end
 end
 
 # == Schema Information

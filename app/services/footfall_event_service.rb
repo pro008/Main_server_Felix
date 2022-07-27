@@ -1,4 +1,4 @@
-class FootfallService
+class FootfallEventService
   def initialize(**opts)
     @footfall_dates = opts[:footfall_dates]
     @dmax = opts[:dmax] || 100
@@ -8,7 +8,7 @@ class FootfallService
     @virtual_locations = opts[:virtual_locations] # {destination: {lat: 44.478395, lng:26.103578}}
   end
 
-  # r = FootfallService.new(virtual_locations: virtual_locations, footfall_dates: ['2022-05-01..2022-08-30'], dmax: 200).execute(@results)
+  # r = FootfallEventService.new(virtual_locations: virtual_locations, footfall_dates: ['2022-05-01..2022-08-30'], dmax: 100).execute(Campaign.last)
 
   def distance(loc1, loc2)
     rad_per_deg = Math::PI / 180 # PI / 180
@@ -81,36 +81,29 @@ class FootfallService
     @footfall_dates = tmp_fds.flatten
   end
 
-  def execute(data)
+  def execute(campaign)
     date_config
-    # ca = Campaign.find camp_id
     inf = {}
     foo = {}
     total_foo = {}
-    # locations = ca.ad_groups.inject([]) { |r, g| r + g.locations } if virtual_locations.present?
-    data.reverse.each_with_index do |event, i|
-      # next unless event['campaign'] == 'CP'
-      # e = event['event']['json']
-      # datetime = Time.at(event['timestamp']/1000)
-      e = event
-      datetime = e['timestamp']
-      next if e['lat'] == 'unknown' || e['lng'] == 'unknown'
 
-      if e['device_id']&.include?('-')
-        maid = e['device_id']
-      elsif e['cookieid']
-        maid = e['cookieid']
+    binding.pry
+    Event.where(campaign_id: campaign.id).where('received_at >= (?)', '16/07/2022'.to_date).order("received_at").each do |event|
+      e = event
+      datetime = e.received_at
+      next if e.invalid_lat_lng?
+
+      if e.device_id&.include?('-')
+        maid = e.device_id
+      elsif e.cookieid
+        maid = e.cookieid
       else
         next
       end
 
-      d = e['distance']
-      loc = e['nearestlocationname']
-      # if virtual_locations.include?(loc)
-        # d, nearest_loc = find_nearest_locs(locations, [e['lat'], e['lng]']], virtual_locations)
-      d, nearest_loc = find_nearest_without_locs([e['lat'].to_f, e['lng'].to_f])
+      d, nearest_loc = find_nearest_without_locs([e.latitude, e.longitude])
       loc = nearest_loc.to_s
-      # end
+
       next if loc.nil?
 
       date = datetime.to_date
