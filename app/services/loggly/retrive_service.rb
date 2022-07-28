@@ -10,6 +10,7 @@ class Loggly::RetriveService
     @creative = creative
     @results = []
     @store = store
+    @done = false
     post_init
   end
 
@@ -69,9 +70,11 @@ class Loggly::RetriveService
       parse_body_as_json(body['events'])
     end
 
-    return if body['next'].nil?
+    return if body['next'].nil? || @done == true
 
     url_fetch(body['next'])
+
+    nil
   end
 
   def url_fetch_custom(next_page_url = nil)
@@ -96,6 +99,7 @@ class Loggly::RetriveService
     return if body['next'].nil?
 
     url_fetch_custom(body['next'])
+    nil
   end
 
   def search_query_submit
@@ -128,15 +132,18 @@ class Loggly::RetriveService
   def parse_body_and_store(body)
     first_record = Time.at(body.first['timestamp'] / 1000)
     is_last_updated_nil = campaign.last_updated_at.nil?
-    return if !is_last_updated_nil && campaign.last_updated_at >= first_record
+    return(@done = true) if !is_last_updated_nil && campaign.last_updated_at >= first_record
 
     body.each do |e|
-      event = e['event']['json']
-      timestamp = Time.at(e['timestamp'] / 1000)
-      event['timestamp'] = timestamp
-      next if !is_last_updated_nil && campaign.last_updated_at > timestamp
+      begin
+        event = e['event']['json']
+        timestamp = Time.at(e['timestamp'] / 1000)
+        event['timestamp'] = timestamp
+        next if !is_last_updated_nil && campaign.last_updated_at > timestamp
 
-      ImportEventService.create(event, campaign.id)
+        ImportEventService.create(event, campaign.id)
+      rescue
+      end
     end
   end
 
@@ -151,6 +158,13 @@ class Loggly::RetriveService
   end
 
   def event_url_v2
+    # from_date = campaign.last_updated_at if store
+    from_date ||= '2022-07-15 06:30:26'
+    options = { q: campaign_name, from: from_date, until: 'now', size: '1000' }.to_query
+    EVENT_DIRECT_URI + options
+  end
+
+  def custom_event_url_v2
     from_date = campaign.last_updated_at if store
     from_date ||= '2022-05-01 00:00:00.000'
     options = { q: campaign_name, from: from_date, until: 'now', size: '1000' }.to_query
